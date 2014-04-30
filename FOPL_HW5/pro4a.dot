@@ -1,0 +1,14 @@
+digraph g {
+	rankdir=BT
+
+	1 [shape=record, label="{<f00> Parent* | x | x: | y | y: } | {<f01> | <f11> 3 | <f21> \<-- | <f31> 4| <f41> \<--}"]	
+	2 [shape=record, label="{<f00> equals | <f10> distance } | {<f01> | <f11>}"]
+//	2 [shape=record, label="point traits"]
+
+	3 [shape=record, label="code for equals"]
+	4 [shape=record, label="code for distance"]
+	
+	1:f01 -> 2:f00;
+	2:f01 -> 3;
+	2:f11 -> 4;
+}

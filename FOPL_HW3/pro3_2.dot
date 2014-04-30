@@ -1,0 +1,51 @@
+digraph G {
+	compound=true
+	subgraph c1 {
+	1 -> 2
+	1 -> 3
+	1 -> 4
+	3 -> 5
+	3 -> 6
+	4 -> 7
+	4 -> 8
+	7 -> 9
+	7 -> 10
+	8 -> 11
+	}
+	subgraph c2 {
+	8 -> 12
+	10 -> 13
+	10 -> 14
+	13 -> 15
+	13 -> 16
+	11 -> 17 
+	11 -> 18
+	}
+	subgraph 3 {
+//	14 -> 5 [style=dotted]
+//	12 -> 6 [style=dotted]
+//	18 -> 9 [style=dotted]
+	}
+	subgraph s1 {
+	1 [label="Fn"]
+	2 [label="f"]
+	3 [label="PatPair"]
+	4 [label="App"]
+	5 [label="x"]
+	6 [label="y"]
+	7 [label="LetExp"]
+	8 [label="App"]
+	9 [label="z"]
+	10 [label="App"]
+	11 [label="App"]
+	}
+	subgraph s2 {
+	12 [label="y"]
+	13 [label="App"]
+	14 [label="x"]
+	15 [label="*"]
+	16 [label="2"]
+	17 [label="+"]
+	18 [label="z"]
+	}
+}

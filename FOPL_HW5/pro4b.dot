@@ -1,0 +1,12 @@
+digraph g {
+	rankdir=BT;
+
+	0 [shape=record, label="<f00> point traits"]
+	1 [shape=record, label="{<f00> Parent* | <f10> x | <f20> x: | <f30> y | <f40> y:} | {<f01> | <f11> | <f21> \<-- | <f31> | <f41> \<--}"];
+	2 [shape=record, label="{<f00> Parent* | <f10> y | <f20> y: } | {<f01> | <f11> | <f21> \<--}"];
+	3 [shape=record, label="{<f00> Parent* | <f10> y | <f20> y: } | {<f01> | <f11> | <f21> \<--}"];
+
+	1:f01 -> 0:f00;
+	2:f01 -> 1:f00;
+	3:f01 -> 1:f00;
+}

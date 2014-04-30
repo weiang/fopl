@@ -1,0 +1,166 @@
+\documentclass{paper}
+\usepackage{xeCJK}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xcolor}
+
+%\lstset
+%{
+%    basicstyle=\ttfamily,
+%    numbers=left,
+%    % numberstyle=\tiny,
+%    keywordstyle=\color[RGB]{0, 0, 255},
+%    commentstyle=\color[RGB]{0, 128, 0},
+%    frame=shadowbox,
+%    rulesepcolor=\color{red!20!green!20!blue!20},
+%    showspaces=false,
+%    showstringspaces=false,
+%    extendedchars=false,
+%    showtabs=false,
+%    tabsize=4, breaklines,
+%    xleftmargin=2em,xrightmargin=2em, aboveskip=1em
+%  }
+
+\lstset{numbers=none,
+  numberstyle=\scriptsize,
+  flexiblecolumns=false,
+  language=Haskell,
+  frame=shadowbox,
+  basicstyle=\ttfamily\small,
+  breaklines=true,
+  extendedchars=true,
+  escapechar=\%,
+  texcl=true,
+  showstringspaces=false,
+  keywordstyle=\bfseries,
+  tabsize=4}
+
+\setCJKmainfont{AR PL UKai CN}
+\title{FOPL-Homework4}
+\author{昂伟 PB11011058}
+
+
+\begin{document}
+%	\noindent {\bf Name : 昂伟 \quad Student Id : PB11011058 \quad FOPL-Homework3}
+\maketitle
+
+\section*{Problem 1}
+见{} \href{prob1.hs}{\textit{prob1.hs}}
+
+\section*{Problem 2}
+	\subsection*{(a)}
+		\textit{return}与$\leftarrow$作用相反，它将一个\textbf{pure value}封装为一个\textit{IO}对象。
+	
+	\subsection*{(b)}
+	\begin{lstlisting}
+	m >>= \_ -> n
+	\end{lstlisting}
+	
+	\subsection*{(c)}
+	\begin{lstlisting}
+	getLine :: IO [Char]
+	getLine = getchar >>= \c -> 
+                            if c == '\n'
+                               then return []
+                            else 
+                               getLine >>= \cs -> return (c:cs)
+	\end{lstlisting}
+	
+\section*{Problem 3}
+	\subsection*{(a)}
+	见{} \href{./Guesser.hs}{\textit{untilIO :: IO Bool -> IO ()}}
+	\begin{lstlisting}
+	untilIO :: IO Bool -> IO ()
+	untilIO x = do 
+	        result <- x
+	        if result == True
+		       then return ()
+	        else 
+		       untilIO(x)
+	\end{lstlisting}
+	
+	\subsection*{(b)}
+	见{} \href{./Guesser.hs}{\textit{doGuess :: Int -> IO Bool}}
+	\begin{lstlisting}
+	doGuess :: Int -> IO Bool
+	doGuess secret = do
+        guess <- getLine
+        let x = read guess
+        case compare x secret of 
+               LT -> putStrLn "Too low!" >> return False 
+               EQ -> putStrLn "Congratulations!" >> return True
+               GT -> putStrLn "Too high!" >> return False
+
+	\end{lstlisting}
+	
+\section*{Problem 5}
+	\subsection*{(a)}
+	
+	\begin{minipage}{.45\textwidth}
+	\centering
+	\textit{Activation Records}\\
+	\begin{tabular}{l|l|c}
+	\hline
+	(1) 		& access link 	& (0) 	\\ 	\cline{2-3}
+    			& y 				& 0		\\
+	\hline
+	(2)		& access link 	& (1) 	\\	\cline{2-3}
+   			& x				& 0	 	\\
+	\hline
+	(3) 	  	& access link 	& (2)		\\ 	\cline{2-3}
+ 			& g				& .		\\	\cline{2-3}
+ 			& exn handler  	& 		\\
+ 	\hline 
+ 	(4) 		&	access link & (3)	\\	\cline{2-3}
+ 			& 	b			& .		\\	\cline{2-3}
+ 			&	exn handler & 		\\
+ 	\hline
+ 	(5) 		& 	access link & (4)		\\	\cline{2-3}
+ 			& 	exn handler	& 19		\\	\cline{2-3}
+ 	\hline
+ 	(6) b(...)& access link 	& (4)		\\	\cline{2-3}
+ 			& h	 			&  .			\\	\cline{2-3}
+ 			& x				& 2			\\	\cline{2-3}
+ 			& exn handler   & 14			\\	\cline{2-3}
+ 			& f 				& . 			\\
+ 	\hline
+ 	(7) g(...)& access link 	& (3)		\\	\cline{2-3}
+ 			& h				& .		\\	\cline{2-3}
+ 			& x 				& 4		\\	\cline{2-3}
+ 			& exn handler 	& 7  	\\	
+	\hline
+	(8) f(...)& access link	& (6)	\\	\cline{2-3}
+			& x				& 6		\\
+	\hline
+	\end{tabular}
+\end{minipage}
+\makeatletter\
+\begin{minipage}{.3\textwidth}
+\centering
+\textit{Closures}\\
+<(3), $\cdot$> \\
+<(4), $\cdot$> \\
+<(6), $\cdot$>
+\end{minipage}
+\makeatletter\
+\begin{minipage}{.2\textwidth}
+\centering
+\textit{Compiled Codes}\\
+$\textbar\ code\ for\ g \textbar $\\
+$\textbar\ code\ for\ b \textbar $\\
+$\textbar\ cod\ for\ f \textbar $
+\end{minipage}
+	\subsection*{(b)}
+	活动记录（7）（8）被弹出栈。因为抛出异常时，由动态作用域知，异常处理由14行的代码处理，所以活动记录（6）之上的活动记录都被弹出。
+	\subsection*{(c)}
+	$y = 2$.
+
+\section*{Problem 6}
+ 	\subsection*{(a)}
+ 	\textbf{McCarthy}定义的垃圾在我们定义中不一定是垃圾。\textbf{McCarthy}的定义中不能被基址寄存器引用的内存即为垃圾，而不能被基址寄存器引用却有可能被内存中的指针引用，所以该内存可能程序的后续指令引用，所以\textbf{McCarthy}定义的垃圾不一定是我们定义的垃圾。
+ 	\subsection*{(b)} 
+ 	我们定义的垃圾一定是\textbf{McCarthy}定义的垃圾。我们的定义中不能被程序后续指令引用的内存是垃圾，既然不能被引用当然不能被基址寄存器引用，所以我们定义的垃圾一定是\textbf{McCarthy}定义的垃圾。
+ 	\subsection*{(c)}
+ 	不可能写出一个垃圾收集器来收集完我们定义的垃圾。因为当程序执行到某点需要进行垃圾收集时，我们只能确定该点之前申请的内存空间中哪些内存一定不会被用到，但是我们无法确定程序后续指令是否一定不会用到的内存空间。所以我们只能采取相对保守的策略：只释放一定不会被用到的内存。
+\end{document}
